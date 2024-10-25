@@ -1,0 +1,9 @@
+name: sc2024
+channels:
+  - conda-forge
+dependencies:
+  - rise
+  - matplotlib
+  - pip
+  - pip:
+      - git+https://github.com/esgf2-us/intake-esgf
