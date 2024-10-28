@@ -1,11 +1,23 @@
 name: sc2024
 channels:
   - conda-forge
+  - pyviz
 dependencies:
   - rise
   - rooki
   - pyproj
   - matplotlib
+  - python<3.12
+  - hvplot
+  - holoviews
+  - globus-compute-sdk
+  - globus-compute-endpoint
+  - xarray
+  - cartopy
+  - clisops
+  - geoviews
+  - dask
+  - netCDF4
   - pip
   - pip:
       - git+https://github.com/esgf2-us/intake-esgf
