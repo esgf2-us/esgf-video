@@ -30,3 +30,27 @@ Read in 2:30
 - Rooki is a great solution if your task fits into the operators that they implement. This minimizes data transfer loads by reducing the data before sending it to the user. We used intake-esgf to help form the ids that rooki needs to remotely load data.
 
 # Globus Compute 
+
+Read in 3:06
+
+- A more flexible option is to use Globus Compute.
+- What if we have a computation that fits outside the averaging/subsetting/regridding workflows? For this demonstration we will consider the el Nino southern oscillation index. This is an important climate index built by combining some statistical measures of model output around the equator.
+- Globus Compute can handle this custom workflow. It provides a mechanism to supply credentials, configure and balance our workload and execution environment, and retrieve the results of the computation.
+- So, given a target workload, how do we start using Globus Compute?
+- First we write a function that uses intake-esgf to load data and then perform the desired operations. This function will need to be registered with Globus.
+- Once registered, you can share your function with a user group of your choosing via globus.org.
+- Now we will demonstrate this with the ENSO example.
+- We start by importing packages we will use for computation and visualization, using intake-esgf for data access.
+- Then we write, register, and test our function. Make sure that all libraries are imported in your function and also installed. The output of the function also needs to be serializable. In our example we will compute the ENSO index for 2 models, CESM2 and MIROC6.
+- Our function takes a source_id as input, uses intake-esgf to locate and load data, and then compute the ENSO index in an xarray dataset.
+- We first test it locally by passing in a source_id, CESM2, and then inspecting the returned dataset.
+- Once the function is working, we need to initialize our compute endpoint. This requires that globus-compute-endpoint is installed, after which we run configure to provide a endpoint name and start to return a ID.
+- We will use this ID and so we store it now.
+- Next we setup an executor which uses this ID and requires that ports are configured. We are now ready to compute.
+- We launch our ENSO function using Globus compute on our endpoint. We do this by submitting 2 tasks to the endpoint, in each case supplying the source_id.
+- In order to pull down results, we have to call each task's result function, storing each in a local variable.
+- Once we have these datasets, now we can visualize locally. We have written a plotting function which we can call on both result datasets to study the ENSO metric through the years.
+- Now we can share this function with others with Globus Groups. We have created a group for ESGF work at the ALCF. We only need to copy the groups ID.
+- Then we use the Globus client to register this function. Providing the group ID allows all group members to discover and launch the function. This will return a function ID to which we will refer.
+- We can run this function as before, providing a compute endpoint as well as the function id we just created. Running this function returns the same result as before.
+- Globus compute is a great solution if a user needs custom computation near the data. As with rooki, it also minimizes data transfer by only returning the results. In this case, intake-esgf was used to locate the data that already exists on the remote system, avoiding unnecessary downloads.
